@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جعبه‌شادی | فروشگاه اینترنتی اسباب‌بازی</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#EF394E;
+    --red-dark:#C81E33;
+    --orange:#FF8A00;
+    --bg:#F1F1F2;
+    --card:#FFFFFF;
+    --text:#28303A;
+    --text-soft:#767E86;
+    --border:#EAEAEA;
+    --star:#FFA300;
+    --green:#1FAD70;
+    --shadow:0 2px 10px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:'Vazirmatn',sans-serif;line-height:1.7;
+    padding-bottom:64px; /* room for bottom nav */
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;border:none;}
+  input{font-family:inherit;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    background:var(--red-dark);color:#fff;font-size:12px;
+    padding:6px 16px;text-align:center;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;background:var(--card);
+    box-shadow:var(--shadow);
+  }
+  .nav{
+    max-width:1100px;margin:0 auto;padding:12px 16px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .logo{
+    font-weight:800;font-size:20px;color:var(--red);
+    display:flex;align-items:center;gap:6px;flex-shrink:0;
+  }
+  .logo b{background:var(--red);color:#fff;border-radius:8px;padding:3px 8px;font-size:16px;}
+  .search-wrap{
+    flex:1;display:flex;background:var(--bg);border:1.5px solid var(--border);
+    border-radius:10px;overflow:hidden;
+  }
+  .search-wrap input{
+    flex:1;border:none;background:transparent;padding:10px 12px;font-size:14px;color:var(--text);outline:none;
+  }
+  .search-wrap button{
+    background:var(--red);color:#fff;padding:0 16px;font-size:15px;
+  }
+  .cart-btn{
+    position:relative;background:var(--red);color:#fff;
+    padding:9px 16px;border-radius:10px;
+    display:flex;align-items:center;gap:6px;font-weight:700;font-size:13px;flex-shrink:0;
+  }
+  .cart-badge{
+    position:absolute;top:-7px;left:-7px;background:var(--text);color:#fff;
+    font-size:11px;font-weight:700;width:20px;height:20px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;border:2px solid var(--card);
+  }
+
+  /* ---------- Category icon shortcuts ---------- */
+  .cat-scroll{
+    max-width:1100px;margin:0 auto;padding:14px 16px 4px;
+    display:flex;gap:10px;overflow-x:auto;
+  }
+  .cat-scroll::-webkit-scrollbar{display:none;}
+  .cat-item{
+    flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:6px;
+    width:72px;padding:10px 4px;border-radius:12px;background:var(--card);
+    border:1.5px solid var(--border);
+  }
+  .cat-item.active{border-color:var(--red);background:#FFF1F2;}
+  .cat-item .ic{font-size:26px;}
+  .cat-item .lb{font-size:11px;font-weight:600;color:var(--text-soft);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:64px;}
+  .cat-item.active .lb{color:var(--red);}
+
+  /* ---------- Promo banner ---------- */
+  .banner{
+    max-width:1100px;margin:14px auto;padding:0 16px;
+  }
+  .banner-inner{
+    background:linear-gradient(115deg,var(--red) 0%,var(--orange) 100%);
+    border-radius:16px;padding:26px 24px;color:#fff;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    box-shadow:var(--shadow);
+  }
+  .banner-inner h2{margin:0 0 6px;font-size:24px;font-weight:800;}
+  .banner-inner p{margin:0 0 14px;font-size:13.5px;opacity:.95;}
+  .banner-cta{
+    background:#fff;color:var(--red);font-weight:800;font-size:13px;
+    padding:9px 18px;border-radius:999px;display:inline-block;
+  }
+  .banner-emoji{font-size:56px;flex-shrink:0;}
+
+  /* ---------- Toolbar (sort/count) ---------- */
+  .toolbar{
+    max-width:1100px;margin:0 auto;padding:6px 16px;
+    display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-soft);
+  }
+
+  /* ---------- Product grid ---------- */
+  .grid{
+    max-width:1100px;margin:0 auto;padding:6px 16px 30px;
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px;
+  }
+  .empty-state{max-width:1100px;margin:0 auto;padding:40px 16px;text-align:center;color:var(--text-soft);}
+  .card{
+    position:relative;background:var(--card);border-radius:12px;border:1px solid var(--border);
+    padding:12px 10px 10px;transition:box-shadow .15s ease, border-color .15s ease;
+  }
+  .card:hover{box-shadow:0 6px 18px rgba(0,0,0,.1);border-color:#ddd;}
+  .discount-badge{
+    position:absolute;top:8px;right:8px;background:var(--red);color:#fff;
+    font-size:11px;font-weight:800;padding:3px 6px;border-radius:6px;z-index:2;
+  }
+  .img-box{
+    background:var(--bg);border-radius:10px;height:110px;
+    display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:10px;
+  }
+  .card h3{font-size:13px;margin:0 0 6px;font-weight:600;color:var(--text);min-height:36px;line-height:1.5;}
+  .rating{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-soft);margin-bottom:6px;}
+  .rating .stars{color:var(--star);letter-spacing:1px;font-size:12px;}
+  .price-row{margin-bottom:8px;}
+  .old-price{font-size:11px;color:#B0B6BC;text-decoration:line-through;display:block;margin-bottom:2px;}
+  .price{font-weight:800;font-size:15px;color:var(--text);}
+  .price.discounted{color:var(--red);}
+  .add-btn{
+    width:100%;background:var(--bg);color:var(--red);padding:8px;border-radius:8px;
+    font-size:12.5px;font-weight:700;border:1.5px solid var(--red);transition:all .15s ease;
+  }
+  .add-btn:hover{background:var(--red);color:#fff;}
+  .add-btn.added{background:var(--green);color:#fff;border-color:var(--green);}
+
+  /* ---------- Cart drawer ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:60;}
+  .overlay.open{opacity:1;pointer-events:auto;}
+  .drawer{
+    position:fixed;top:0;left:0;height:100%;width:min(380px,88vw);background:var(--bg);z-index:70;
+    transform:translateX(-100%);transition:transform .3s ease;display:flex;flex-direction:column;
+    box-shadow:12px 0 30px rgba(0,0,0,.15);
+  }
+  .drawer.open{transform:translateX(0);}
+  .drawer-head{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--card);}
+  .drawer-head h2{margin:0;font-size:17px;font-weight:800;}
+  .close-btn{background:var(--bg);border:1px solid var(--border);width:32px;height:32px;border-radius:50%;font-size:15px;}
+  .drawer-body{flex:1;overflow-y:auto;padding:14px 16px;}
+  .cart-empty{text-align:center;color:var(--text-soft);margin-top:60px;font-size:14px;}
+  .cart-empty span{font-size:44px;display:block;margin-bottom:10px;}
+  .cart-item{display:flex;gap:10px;align-items:center;background:var(--card);border-radius:10px;padding:10px;margin-bottom:10px;border:1px solid var(--border);}
+  .cart-item .ic{font-size:30px;}
+  .cart-item .info{flex:1;}
+  .cart-item .info h4{margin:0 0 4px;font-size:13px;font-weight:700;}
+  .cart-item .info .p{font-size:12px;color:var(--text-soft);}
+  .qty{display:flex;align-items:center;gap:8px;}
+  .qty button{width:22px;height:22px;border-radius:50%;background:var(--bg);border:1px solid var(--border);font-weight:700;}
+  .remove{font-size:11px;color:var(--red);font-weight:700;margin-right:6px;}
+  .drawer-foot{padding:14px 16px 18px;border-top:1px solid var(--border);background:var(--card);}
+  .total-row{display:flex;justify-content:space-between;font-weight:800;font-size:16px;margin-bottom:12px;}
+  .checkout-btn{width:100%;background:var(--red);color:#fff;padding:13px;border-radius:10px;font-weight:800;font-size:15px;}
+  .checkout-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+  .toast{
+    position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--text);color:#fff;padding:12px 22px;border-radius:999px;
+    font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:all .3s ease;z-index:90;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  footer{text-align:center;padding:24px 16px 14px;color:var(--text-soft);font-size:12px;}
+  .admin-link{background:none;color:var(--text-soft);font-size:11px;text-decoration:underline;margin-top:6px;display:inline-block;opacity:.6;}
+
+  /* ---------- Bottom mobile nav ---------- */
+  .bottom-nav{
+    position:fixed;bottom:0;left:0;right:0;z-index:55;background:var(--card);
+    border-top:1px solid var(--border);display:flex;
+    padding-bottom:env(safe-area-inset-bottom,0);
+  }
+  .bn-item{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+    padding:8px 4px 6px;font-size:10.5px;color:var(--text-soft);font-weight:600;position:relative;
+  }
+  .bn-item .ic{font-size:19px;}
+  .bn-item.active{color:var(--red);}
+  .bn-badge{
+    position:absolute;top:2px;left:calc(50% + 6px);background:var(--red);color:#fff;
+    font-size:9px;font-weight:800;width:15px;height:15px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* ---------- Admin ---------- */
+  .admin-drawer{
+    position:fixed;top:0;right:0;height:100%;width:min(440px,92vw);background:var(--bg);z-index:80;
+    transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column;
+    box-shadow:-12px 0 30px rgba(0,0,0,.15);
+  }
+  .admin-drawer.open{transform:translateX(0);}
+  .admin-head{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--card);}
+  .admin-head h2{margin:0;font-size:17px;font-weight:800;}
+  .admin-body{flex:1;overflow-y:auto;padding:14px 16px;}
+  .admin-note{background:#FFF1E0;border:1px solid var(--orange);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--text-soft);margin-bottom:14px;line-height:1.7;}
+  .admin-section-title{font-size:14px;font-weight:800;margin:16px 0 8px;color:var(--text);}
+  .admin-form{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px;}
+  .field{margin-bottom:9px;}
+  .field label{display:block;font-size:11px;font-weight:700;color:var(--text-soft);margin-bottom:3px;}
+  .field input{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;background:var(--bg);}
+  .field-row{display:flex;gap:8px;}
+  .field-row .field{flex:1;}
+  .form-actions{display:flex;gap:8px;margin-top:6px;}
+  .btn-primary{flex:1;background:var(--red);color:#fff;padding:9px;border-radius:8px;font-weight:700;font-size:13px;}
+  .btn-secondary{background:var(--bg);border:1px solid var(--border);color:var(--text-soft);padding:9px 12px;border-radius:8px;font-weight:700;font-size:13px;}
+  .admin-item{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 10px;margin-bottom:7px;}
+  .admin-item .ic{font-size:24px;}
+  .admin-item .info{flex:1;font-size:12px;}
+  .admin-item .info b{display:block;font-size:13px;}
+  .admin-item .info .meta{color:var(--text-soft);font-size:11px;}
+  .icon-btn{width:28px;height:28px;border-radius:7px;background:var(--bg);border:1px solid var(--border);font-size:13px;}
+  .icon-btn.danger{color:var(--red);}
+  .export-btn{width:100%;background:var(--green);color:#fff;padding:12px;border-radius:10px;font-weight:800;font-size:14px;margin-top:4px;}
+  .lock-screen{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:95;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .lock-box{background:var(--card);border-radius:16px;padding:24px;max-width:320px;width:100%;text-align:center;box-shadow:var(--shadow);}
+  .lock-box h3{margin:0 0 6px;font-size:18px;}
+  .lock-box p{font-size:12.5px;color:var(--text-soft);margin:0 0 14px;}
+  .lock-box input{width:100%;padding:10px;border:1px solid var(--border);border-radius:9px;text-align:center;font-size:15px;margin-bottom:10px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">فروشگاه اینترنتی جعبه‌شادی 🚚 ارسال به سراسر ایران</div>
+
+<header>
+  <div class="nav">
+    <div class="logo"><b>جعبه</b>شادی</div>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="جستجوی اسباب‌بازی...">
+      <button id="searchBtn">🔍</button>
+    </div>
+    <button class="cart-btn" id="cartBtn">
+      🛒 سبد خرید
+      <span class="cart-badge" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<div class="cat-scroll" id="catScroll"></div>
+
+<div class="banner" id="catalog">
+  <div class="banner-inner">
+    <div>
+      <h2>جشنواره اسباب‌بازی</h2>
+      <p>تا ۴۰٪ تخفیف روی محصولات منتخب، فقط همین امروز!</p>
+      <a href="#grid" class="banner-cta">مشاهده تخفیف‌ها</a>
+    </div>
+    <div class="banner-emoji">🎁</div>
+  </div>
+</div>
+
+<div class="toolbar">
+  <span id="resultCount">۰ کالا</span>
+  <span>مرتب‌سازی: پرفروش‌ترین</span>
+</div>
+
+<div class="grid" id="grid"></div>
+<div class="empty-state" id="emptyState" style="display:none;">محصولی با این مشخصات پیدا نشد 🔍</div>
+
+<footer>
+  فروشگاه نمایشی جعبه‌شادی — تمامی حقوق محفوظ است.
+  <br>
+  <button class="admin-link" id="adminOpenLink">⚙ پنل مدیریت</button>
+</footer>
+
+<!-- Bottom mobile nav -->
+<nav class="bottom-nav">
+  <button class="bn-item active" id="bnHome"><span class="ic">🏠</span>خانه</button>
+  <button class="bn-item" id="bnCats"><span class="ic">🗂️</span>دسته‌ها</button>
+  <button class="bn-item" id="bnCart">
+    <span class="ic">🛒</span>سبد خرید
+    <span class="bn-badge" id="bnCartBadge" style="display:none;">0</span>
+  </button>
+  <button class="bn-item" id="bnAccount"><span class="ic">👤</span>حساب من</button>
+</nav>
+
+<!-- Cart drawer -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h2>سبد خرید</h2>
+    <button class="close-btn" id="closeBtn">✕</button>
+  </div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-foot">
+    <div class="total-row"><span>جمع کل</span><span id="totalPrice">۰ تومان</span></div>
+    <input type="tel" id="customerPhone" placeholder="شماره موبایل (برای درگاه پرداخت)" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;margin-bottom:10px;font-size:13px;background:var(--bg);">
+    <button class="checkout-btn" id="checkoutBtn">پرداخت و ثبت سفارش</button>
+  </div>
+</aside>
+
+<!-- Admin lock screen -->
+<div class="lock-screen" id="lockScreen" style="display:none;">
+  <div class="lock-box">
+    <h3>🔒 ورود به پنل مدیریت</h3>
+    <p>رمز عبور رو وارد کنید (پیش‌فرض: <b>1234</b>)</p>
+    <input type="password" id="pwInput" placeholder="رمز عبور">
+    <div class="form-actions">
+      <button class="btn-primary" id="pwSubmit">ورود</button>
+      <button class="btn-secondary" id="pwCancel">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin panel -->
+<div class="overlay" id="adminOverlay"></div>
+<aside class="admin-drawer" id="adminDrawer">
+  <div class="admin-head">
+    <h2>⚙ پنل مدیریت محصولات</h2>
+    <button class="close-btn" id="adminCloseBtn">✕</button>
+  </div>
+  <div class="admin-body">
+    <div class="admin-note">
+      تغییرات فوراً روی همین دستگاه ذخیره می‌شه. برای اینکه برای <b>همه بازدیدکننده‌ها</b> دیده بشه، دکمه «دانلود نسخه به‌روز» رو بزنید و فایل رو دوباره در Netlify Drop آپلود کنید.
+    </div>
+
+    <div class="admin-section-title" id="formTitle">افزودن محصول جدید</div>
+    <div class="admin-form">
+      <input type="hidden" id="editId">
+      <div class="field">
+        <label>نام محصول</label>
+        <input type="text" id="fName" placeholder="مثلاً برج مکعب‌های رنگی">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>دسته‌بندی</label>
+          <input type="text" id="fCat" placeholder="مثلاً ساختنی">
+        </div>
+        <div class="field">
+          <label>ایموجی نماد</label>
+          <input type="text" id="fIcon" placeholder="🧱">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>قیمت (تومان)</label>
+          <input type="number" id="fPrice" placeholder="250000">
+        </div>
+        <div class="field">
+          <label>برچسب تخفیف (اختیاری)</label>
+          <input type="text" id="fTag" placeholder="مثلاً پرفروش">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" id="saveProductBtn">افزودن به فروشگاه</button>
+        <button class="btn-secondary" id="cancelEditBtn" style="display:none;">انصراف از ویرایش</button>
+      </div>
+    </div>
+
+    <div class="admin-section-title">محصولات فعلی (<span id="productCount">0</span>)</div>
+    <div id="adminList"></div>
+
+    <button class="export-btn" id="exportBtn">⬇ دانلود نسخه به‌روز سایت</button>
+    <button class="export-btn" id="torobFeedBtn" style="background:var(--orange);margin-top:8px;">🧾 دانلود فید محصولات ترب (XML)</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script type="application/json" id="productsData">
+[
+  {"id":1,"name":"برج مکعب‌های رنگی","cat":"ساختنی","icon":"🧱","price":285000,"tag":"پرفروش"},
+  {"id":2,"name":"عروسک خرگوش پشمالو","cat":"عروسک پولیشی","icon":"🐰","price":190000,"tag":""},
+  {"id":3,"name":"ماشین مسابقه‌ای کنترلی","cat":"وسیله نقلیه","icon":"🏎️","price":540000,"tag":"جدید"},
+  {"id":4,"name":"پازل ۱۰۰ تکه جنگل","cat":"بازی فکری","icon":"🧩","price":150000,"tag":""},
+  {"id":5,"name":"ست آموزش الفبا","cat":"آموزشی","icon":"🔤","price":210000,"tag":""},
+  {"id":6,"name":"عروسک فضانورد","cat":"عروسک","icon":"👩‍🚀","price":230000,"tag":""},
+  {"id":7,"name":"قطار برقی ریلی","cat":"وسیله نقلیه","icon":"🚂","price":620000,"tag":""},
+  {"id":8,"name":"خرس عروسکی بزرگ","cat":"عروسک پولیشی","icon":"🧸","price":340000,"tag":"محبوب"},
+  {"id":9,"name":"میکروسکوپ کودکانه","cat":"آموزشی","icon":"🔬","price":410000,"tag":""},
+  {"id":10,"name":"شطرنج چوبی کلاسیک","cat":"بازی فکری","icon":"♟️","price":295000,"tag":""},
+  {"id":11,"name":"عروسک پری دریایی","cat":"عروسک","icon":"🧜‍♀️","price":225000,"tag":""},
+  {"id":12,"name":"هلیکوپتر بادکنترل از راه دور","cat":"وسیله نقلیه","icon":"🚁","price":480000,"tag":"جدید"}
+]
+</script>
+
+<script>
+const STORAGE_KEY = 'jabeshadi_products';
+const PW_KEY = 'jabeshadi_admin_pw';
+const CART_KEY = 'jabeshadi_pending_cart';
+
+let products = [];
+const saved = localStorage.getItem(STORAGE_KEY);
+if(saved){
+  try{ products = JSON.parse(saved); }catch(e){ products = JSON.parse(document.getElementById('productsData').textContent); }
+}else{
+  products = JSON.parse(document.getElementById('productsData').textContent);
+}
+
+let activeCat = 'all';
+let searchTerm = '';
+let cart = {};
+
+const catScrollEl = document.getElementById('catScroll');
+const gridEl = document.getElementById('grid');
+const emptyStateEl = document.getElementById('emptyState');
+const resultCountEl = document.getElementById('resultCount');
+const cartCountEl = document.getElementById('cartCount');
+const bnCartBadge = document.getElementById('bnCartBadge');
+const cartBodyEl = document.getElementById('cartBody');
+const totalPriceEl = document.getElementById('totalPrice');
+const drawer = document.getElementById('drawer');
+const overlay = document.getElementById('overlay');
+const toast = document.getElementById('toast');
+const checkoutBtn = document.getElementById('checkoutBtn');
+
+function formatPrice(n){ return Number(n).toLocaleString('fa-IR') + ' تومان'; }
+
+function persist(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+  document.getElementById('productsData').textContent = JSON.stringify(products, null, 2);
+}
+
+// deterministic pseudo rating/discount so it looks the same every load
+function ratingFor(id){
+  const stars = (3.6 + (id % 5) * 0.28).toFixed(1);
+  const reviews = 30 + (id * 37) % 460;
+  return {stars: Math.min(5, Number(stars)), reviews};
+}
+function discountFor(p){
+  if(!p.tag) return null;
+  const pct = 10 + (p.id * 7) % 30;
+  const original = Math.round(p.price / (1 - pct/100) / 1000) * 1000;
+  return {pct, original};
+}
+
+function getCategories(){
+  const map = new Map();
+  products.forEach(p => map.set(p.cat, p.cat));
+  return [{key:'all', label:'همه', icon:'🧸'}].concat(
+    [...map.keys()].map(c => ({key:c, label:c, icon:(products.find(p=>p.cat===c)||{}).icon || '🧸'}))
+  );
+}
+
+function renderCategories(){
+  const cats = getCategories();
+  if(!cats.find(c => c.key === activeCat)) activeCat = 'all';
+  catScrollEl.innerHTML = '';
+  cats.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-item' + (c.key === activeCat ? ' active' : '');
+    btn.innerHTML = `<span class="ic">${c.icon}</span><span class="lb">${c.label}</span>`;
+    btn.onclick = () => { activeCat = c.key; renderCategories(); renderGrid(); };
+    catScrollEl.appendChild(btn);
+  });
+}
+
+function renderGrid(){
+  gridEl.innerHTML = '';
+  let list = activeCat === 'all' ? products : products.filter(p => p.cat === activeCat);
+  if(searchTerm.trim()){
+    const t = searchTerm.trim();
+    list = list.filter(p => p.name.includes(t) || p.cat.includes(t));
+  }
+  resultCountEl.textContent = list.length.toLocaleString('fa-IR') + ' کالا';
+  emptyStateEl.style.display = list.length === 0 ? 'block' : 'none';
+
+  list.forEach(p => {
+    const r = ratingFor(p.id);
+    const d = discountFor(p);
+    const fullStars = Math.round(r.stars);
+    const starsStr = '★'.repeat(fullStars) + '☆'.repeat(5 - fullStars);
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.id = 'product-' + p.id;
+    const ld = {
+      "@context":"https://schema.org",
+      "@type":"Product",
+      "name": p.name,
+      "sku": String(p.id),
+      "category": p.cat,
+      "offers": {
+        "@type":"Offer",
+        "priceCurrency":"IRR",
+        "price": p.price * 10, // schema.org IRR = ریال؛ قیمت‌های سایت به تومان است
+        "availability":"https://schema.org/InStock",
+        "url": location.origin + location.pathname + '#product-' + p.id
+      }
+    };
+    card.innerHTML = `
+      ${d ? `<div class="discount-badge">٪${d.pct.toLocaleString('fa-IR')}</div>` : ''}
+      <div class="img-box">${p.icon}</div>
+      <h3>${p.name}</h3>
+      <div class="rating"><span class="stars">${starsStr}</span><span>(${r.reviews.toLocaleString('fa-IR')})</span></div>
+      <div class="price-row">
+        ${d ? `<span class="old-price">${formatPrice(d.original)}</span>` : ''}
+        <div class="price ${d ? 'discounted' : ''}">${formatPrice(p.price)}</div>
+      </div>
+      <button class="add-btn" data-id="${p.id}">افزودن به سبد</button>
+      <script type="application/ld+json">${JSON.stringify(ld)}<\/script>
+    `;
+    gridEl.appendChild(card);
+  });
+  gridEl.querySelectorAll('.add-btn').forEach(btn => {
+    btn.onclick = () => {
+      const id = Number(btn.dataset.id);
+      addToCart(id);
+      btn.textContent = 'اضافه شد ✓';
+      btn.classList.add('added');
+      setTimeout(() => { btn.textContent = 'افزودن به سبد'; btn.classList.remove('added'); }, 900);
+    };
+  });
+}
+
+function addToCart(id){
+  cart[id] = (cart[id] || 0) + 1;
+  updateCartUI();
+  showToast('به سبد خرید اضافه شد 🎉');
+}
+function changeQty(id, delta){
+  if(!cart[id]) return;
+  cart[id] += delta;
+  if(cart[id] <= 0) delete cart[id];
+  updateCartUI();
+}
+function removeItem(id){ delete cart[id]; updateCartUI(); }
+
+function updateCartUI(){
+  const ids = Object.keys(cart).filter(id => products.find(p => p.id === Number(id)));
+  const count = ids.reduce((s,id) => s + cart[id], 0);
+  cartCountEl.textContent = count;
+  bnCartBadge.textContent = count;
+  bnCartBadge.style.display = count > 0 ? 'flex' : 'none';
+
+  if(ids.length === 0){
+    cartBodyEl.innerHTML = `<div class="cart-empty"><span>🛍️</span>سبد خریدت هنوز خالیه!</div>`;
+    checkoutBtn.disabled = true;
+  }else{
+    checkoutBtn.disabled = false;
+    cartBodyEl.innerHTML = ids.map(id => {
+      const p = products.find(x => x.id === Number(id));
+      const qty = cart[id];
+      return `
+        <div class="cart-item">
+          <div class="ic">${p.icon}</div>
+          <div class="info">
+            <h4>${p.name}</h4>
+            <div class="p">${formatPrice(p.price)}</div>
+            <div class="qty">
+              <button onclick="changeQty(${p.id},-1)">−</button>
+              <span>${qty}</span>
+              <button onclick="changeQty(${p.id},1)">+</button>
+              <span class="remove" onclick="removeItem(${p.id})">حذف</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  const total = ids.reduce((s,id) => s + products.find(x=>x.id===Number(id)).price * cart[id], 0);
+  totalPriceEl.textContent = formatPrice(total);
+}
+
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1800);
+}
+
+document.getElementById('cartBtn').onclick = openCart;
+document.getElementById('bnCart').onclick = openCart;
+function openCart(){ drawer.classList.add('open'); overlay.classList.add('open'); }
+document.getElementById('closeBtn').onclick = () => { drawer.classList.remove('open'); overlay.classList.remove('open'); };
+overlay.onclick = () => { drawer.classList.remove('open'); overlay.classList.remove('open'); };
+checkoutBtn.onclick = async () => {
+  if(checkoutBtn.disabled) return;
+  const ids = Object.keys(cart).filter(id => products.find(p => p.id === Number(id)));
+  if(ids.length === 0) return;
+  const amount = ids.reduce((s,id) => s + products.find(x=>x.id===Number(id)).price * cart[id], 0);
+  const phone = document.getElementById('customerPhone').value.trim();
+  const description = 'خرید از جعبه‌شادی - ' + ids.length + ' قلم کالا';
+
+  const originalLabel = checkoutBtn.textContent;
+  checkoutBtn.disabled = true;
+  checkoutBtn.textContent = 'در حال اتصال به درگاه...';
+
+  try{
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    const res = await fetch('/.netlify/functions/create-payment', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ amount, description, phone })
+    });
+    const data = await res.json();
+    if(res.ok && data.url){
+      window.location.href = data.url; // انتقال به درگاه زرین‌پال
+    }else{
+      throw new Error(data.error || 'خطای نامشخص از سرور پرداخت');
+    }
+  }catch(err){
+    showToast('اتصال به درگاه پرداخت ناموفق بود ❌');
+    checkoutBtn.disabled = false;
+    checkoutBtn.textContent = originalLabel;
+  }
+};
+
+// بازگشت از درگاه زرین‌پال: بررسی نتیجه پرداخت از روی پارامترهای URL
+(async function handlePaymentReturn(){
+  const params = new URLSearchParams(location.search);
+  const authority = params.get('Authority');
+  const status = params.get('Status');
+  const amount = params.get('amount');
+  if(!authority) return;
+
+  history.replaceState({}, '', location.pathname);
+
+  if(status !== 'OK'){
+    showToast('پرداخت لغو شد ❌');
+    return;
+  }
+  try{
+    const res = await fetch('/.netlify/functions/verify-payment', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ authority, amount })
+    });
+    const data = await res.json();
+    if(data.success){
+      cart = {};
+      localStorage.removeItem(CART_KEY);
+      updateCartUI();
+      showToast('پرداخت موفق ✅ کد پیگیری: ' + data.refId);
+    }else{
+      showToast('پرداخت تایید نشد ❌ ' + (data.error || ''));
+    }
+  }catch(e){
+    showToast('خطا در بررسی نتیجه پرداخت ❌');
+  }
+})();
+
+document.getElementById('searchBtn').onclick = doSearch;
+document.getElementById('searchInput').addEventListener('keydown', e => { if(e.key === 'Enter') doSearch(); });
+function doSearch(){ searchTerm = document.getElementById('searchInput').value; renderGrid(); }
+
+document.getElementById('bnHome').onclick = () => { window.scrollTo({top:0, behavior:'smooth'}); setActiveNav('bnHome'); };
+document.getElementById('bnCats').onclick = () => { document.getElementById('catScroll').scrollIntoView({behavior:'smooth'}); setActiveNav('bnCats'); };
+document.getElementById('bnAccount').onclick = () => { document.getElementById('adminOpenLink').click(); };
+function setActiveNav(id){
+  document.querySelectorAll('.bn-item').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ---------------- Admin panel ---------------- */
+const lockScreen = document.getElementById('lockScreen');
+const adminDrawer = document.getElementById('adminDrawer');
+const adminOverlay = document.getElementById('adminOverlay');
+const pwInput = document.getElementById('pwInput');
+
+document.getElementById('adminOpenLink').onclick = () => {
+  lockScreen.style.display = 'flex';
+  pwInput.value = '';
+  pwInput.focus();
+};
+document.getElementById('pwCancel').onclick = () => { lockScreen.style.display = 'none'; };
+document.getElementById('pwSubmit').onclick = tryUnlock;
+pwInput.addEventListener('keydown', e => { if(e.key === 'Enter') tryUnlock(); });
+
+function tryUnlock(){
+  const correctPw = localStorage.getItem(PW_KEY) || '1234';
+  if(pwInput.value === correctPw){
+    lockScreen.style.display = 'none';
+    openAdmin();
+  }else{
+    showToast('رمز عبور اشتباهه ❌');
+  }
+}
+
+function openAdmin(){
+  adminDrawer.classList.add('open');
+  adminOverlay.classList.add('open');
+  renderAdminList();
+}
+function closeAdmin(){ adminDrawer.classList.remove('open'); adminOverlay.classList.remove('open'); resetForm(); }
+document.getElementById('adminCloseBtn').onclick = closeAdmin;
+adminOverlay.onclick = closeAdmin;
+
+const fName = document.getElementById('fName');
+const fCat = document.getElementById('fCat');
+const fIcon = document.getElementById('fIcon');
+const fPrice = document.getElementById('fPrice');
+const fTag = document.getElementById('fTag');
+const editId = document.getElementById('editId');
+const formTitle = document.getElementById('formTitle');
+const saveProductBtn = document.getElementById('saveProductBtn');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+
+function resetForm(){
+  editId.value = '';
+  fName.value = ''; fCat.value = ''; fIcon.value = ''; fPrice.value = ''; fTag.value = '';
+  formTitle.textContent = 'افزودن محصول جدید';
+  saveProductBtn.textContent = 'افزودن به فروشگاه';
+  cancelEditBtn.style.display = 'none';
+}
+
+saveProductBtn.onclick = () => {
+  const name = fName.value.trim();
+  const cat = fCat.value.trim();
+  const icon = fIcon.value.trim() || '🧸';
+  const price = Number(fPrice.value);
+  const tag = fTag.value.trim();
+
+  if(!name || !cat || !price || price <= 0){
+    showToast('لطفاً نام، دسته و قیمت معتبر وارد کنید');
+    return;
+  }
+
+  if(editId.value){
+    const id = Number(editId.value);
+    const idx = products.findIndex(p => p.id === id);
+    if(idx > -1) products[idx] = {id, name, cat, icon, price, tag};
+    showToast('محصول ویرایش شد ✏️');
+  }else{
+    const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
+    products.push({id:newId, name, cat, icon, price, tag});
+    showToast('محصول اضافه شد 🎉');
+  }
+
+  persist();
+  resetForm();
+  renderAdminList();
+  renderCategories();
+  renderGrid();
+};
+
+cancelEditBtn.onclick = resetForm;
+
+function renderAdminList(){
+  document.getElementById('productCount').textContent = products.length;
+  const list = document.getElementById('adminList');
+  if(products.length === 0){
+    list.innerHTML = '<p style="font-size:13px;color:var(--text-soft);">هنوز محصولی ثبت نشده.</p>';
+    return;
+  }
+  list.innerHTML = products.map(p => `
+    <div class="admin-item">
+      <div class="ic">${p.icon}</div>
+      <div class="info">
+        <b>${p.name}</b>
+        <div class="meta">${p.cat} · ${formatPrice(p.price)}${p.tag ? ' · '+p.tag : ''}</div>
+      </div>
+      <button class="icon-btn" onclick="editProduct(${p.id})">✏️</button>
+      <button class="icon-btn danger" onclick="deleteProduct(${p.id})">🗑️</button>
+    </div>
+  `).join('');
+}
+
+function editProduct(id){
+  const p = products.find(x => x.id === id);
+  if(!p) return;
+  editId.value = p.id;
+  fName.value = p.name; fCat.value = p.cat; fIcon.value = p.icon; fPrice.value = p.price; fTag.value = p.tag || '';
+  formTitle.textContent = 'ویرایش محصول';
+  saveProductBtn.textContent = 'ذخیره تغییرات';
+  cancelEditBtn.style.display = 'inline-block';
+  document.querySelector('.admin-form').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function deleteProduct(id){
+  if(!confirm('این محصول حذف بشه؟')) return;
+  products = products.filter(p => p.id !== id);
+  Object.keys(cart).forEach(cid => { if(Number(cid) === id) delete cart[cid]; });
+  persist();
+  renderAdminList();
+  renderCategories();
+  renderGrid();
+  updateCartUI();
+  showToast('محصول حذف شد 🗑️');
+}
+
+document.getElementById('exportBtn').onclick = () => {
+  persist();
+  const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  const blob = new Blob([htmlContent], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'index.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('فایل دانلود شد ⬇️ حالا در Netlify Drop آپلودش کنید');
+};
+
+document.getElementById('torobFeedBtn').onclick = () => {
+  const siteBase = location.origin + location.pathname;
+  const items = products.map(p => `
+  <item>
+    <page_url>${siteBase}#product-${p.id}</page_url>
+    <title><![CDATA[${p.name}]]></title>
+    <price>${p.price}</price>
+    <currency>Toman</currency>
+    <availability>instock</availability>
+    <category><![CDATA[${p.cat}]]></category>
+  </item>`).join('');
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<products>${items}\n</products>`;
+  const blob = new Blob([xml], {type:'application/xml'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'torob-feed.xml';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('فید ترب دانلود شد ⬇️ آن را در پنل فروشندگان ترب بارگذاری کنید');
+};
+
+function highlightFromHash(){
+  if(location.hash.startsWith('#product-')){
+    setTimeout(() => {
+      const el = document.querySelector(location.hash);
+      if(el){
+        el.scrollIntoView({behavior:'smooth', block:'center'});
+        el.style.outline = '3px solid var(--red)';
+        setTimeout(() => { el.style.outline = ''; }, 2500);
+      }
+    }, 300);
+  }
+}
+
+renderCategories();
+renderGrid();
+updateCartUI();
+highlightFromHash();
+</script>
+
+</body>
+</html>
